@@ -3,3 +3,5 @@
    tasks:
     - name: Get server hostname
       command: hostname
+    - name: Get IP addr
+      command: ip a
