@@ -6,4 +6,5 @@
       apt: name={{ item }} state=present update_cache=no
       with_items:
        - curl
+       - python-httplib2
        

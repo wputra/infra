@@ -2,8 +2,11 @@
  - hosts: loadbalancer
    become: true
    tasks:
-    - name: Install nginx
-      apt: name=nginx state=present update_cache=no
+    - name: Install nginx and tools
+      apt: name={{ item }} state=present update_cache=no
+      with_items:
+       - nginx
+       - python-httplib2
 
     - name: Configure nginx
       template: src=templates/demo_lb.j2 dest=/etc/nginx/sites-available/demo_lb mode=0644
