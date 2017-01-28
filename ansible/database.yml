@@ -2,8 +2,11 @@
  - hosts: database
    become: true
    tasks:
-    - name: Install mysql-server
-      apt: name=mysql-server state=present update_cache=no
+    - name: Install mysql-server and its tools
+      apt: name={{ item }} state=present update_cache=no
+      with_items:
+       - mysql-server
+       - python-mysqldb
 
     - name: Ensure mysql listening on all IP
       lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address line="bind-address = 0.0.0.0"

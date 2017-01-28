@@ -9,6 +9,7 @@
        - libapache2-mod-wsgi
        - python-pip
        - python-virtualenv
+       - python-mysqldb
 
     - name: Ensure mod_wsgi enabled
       apache2_module: name=wsgi state=present
