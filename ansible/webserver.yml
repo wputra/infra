@@ -29,6 +29,14 @@
       pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv
       notify: Restart apache2
 
+    - name: De-activate apache2 default config
+      file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+      notify: Restart apache2
+
+    - name: Acivate demo config
+      file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
+      notify: Restart apache2
+
    handlers:
     - name: Restart apache2
       service: name=apache2 state=restarted
