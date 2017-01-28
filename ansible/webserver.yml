@@ -22,7 +22,7 @@
       notify: Restart apache2
 
     - name: Copy apache2 vhost config
-      copy: src=demo/demo.conf dest=/etc/apache2/site-available mode=0775
+      copy: src=demo/demo.conf dest=/etc/apache2/sites-available mode=0775
       notify: Restart apache2
 
    handlers:
