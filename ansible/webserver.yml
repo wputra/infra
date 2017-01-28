@@ -10,9 +10,6 @@
        - python-pip
        - python-virtualenv
 
-    - name: Ensure apache2 running
-      service: name=apache2 state=started enabled=yes
-
     - name: Ensure mod_wsgi enabled
       apache2_module: name=wsgi state=present
       notify: Restart apache2
@@ -36,6 +33,9 @@
     - name: Acivate demo config
       file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
       notify: Restart apache2
+
+    - name: Ensure apache2 running
+      service: name=apache2 state=started enabled=yes
 
    handlers:
     - name: Restart apache2
