@@ -25,4 +25,47 @@
 
     - name: Ensure mysql listen on port 3306
       wait_for: port=3306 timeout=1
-      
+
+ - hosts: control
+   tasks:
+    - name: Verify end-to-end status
+      uri: url=http://{{ item }} return_content=yes
+      with_items: lb01
+      register: lb_index
+
+    - fail: msg="Index fail to return content"
+      when: "'Hello, from sunny' not in item.content"
+      with_items: "{{ lb_index.results }}"
+
+    - name: Verify database status
+      uri: url=http://{{ item }}/db return_content=yes
+      with_items: lb01
+      register: lb_db
+
+    - fail: msg="Database fail to return content"
+      when: "'Database Connected' not in item.content"
+      with_items: "{{ lb_db.results }}"
+
+ - hosts: loadbalancer
+   tasks:
+    - name: Verify backend status
+      uri: url=http://{{ item }} return_content=yes
+      with_items:
+       - app01
+       - app02
+      register: app_index
+
+    - fail: msg="Index fail to return content"
+      when: "'Hello, from sunny' not in item.content"
+      with_items: "{{ app_index.results }}"
+
+    - name: Verify database status from backend
+      uri: url=http://{{ item }}/db return_content=yes
+      with_items:
+       - app01
+       - app02
+      register: app_db
+
+    - fail: msg="Database fail to return content"
+      when: "'Database Connected' not in item.content"
+      with_items: "{{ app_db.results }}"
