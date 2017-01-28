@@ -5,5 +5,13 @@
     - name: Install mysql-server
       apt: name=mysql-server state=present update_cache=no
 
+    - name: Ensure mysql listening on all IP
+      lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address line="bind-address = 0.0.0.0"
+      notify: Restart mysql
+
     - name: Ensure mysql running
       service: name=mysql state=started enabled=yes
+
+   handlers:
+    - name: Restart mysql
+      service: name=mysql state=restarted
