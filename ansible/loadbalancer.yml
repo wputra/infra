@@ -3,7 +3,7 @@
    become: true
    tasks:
     - name: Install nginx
-      apt: name=nginx state=present update_cache=yes
+      apt: name=nginx state=present update_cache=no
 
     - name: Configure nginx
       template: src=templates/demo_lb.j2 dest=/etc/nginx/sites-available/demo_lb mode=0644
