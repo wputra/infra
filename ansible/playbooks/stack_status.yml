@@ -30,7 +30,7 @@
    tasks:
     - name: Verify end-to-end status
       uri: url=http://{{ item }} return_content=yes
-      with_items: lb01
+      with_items: "{{ groups['loadbalancer'] }}"
       register: lb_index
 
     - fail: msg="Index fail to return content"
@@ -39,7 +39,7 @@
 
     - name: Verify database status
       uri: url=http://{{ item }}/db return_content=yes
-      with_items: lb01
+      with_items: "{{ groups['loadbalancer'] }}"
       register: lb_db
 
     - fail: msg="Database fail to return content"
@@ -50,9 +50,7 @@
    tasks:
     - name: Verify backend status
       uri: url=http://{{ item }} return_content=yes
-      with_items:
-       - app01
-       - app02
+      with_items: "{{ groups['webserver'] }}"
       register: app_index
 
     - fail: msg="Index fail to return content"
@@ -61,9 +59,7 @@
 
     - name: Verify database status from backend
       uri: url=http://{{ item }}/db return_content=yes
-      with_items:
-       - app01
-       - app02
+      with_items: "{{ groups['webserver'] }}"
       register: app_db
 
     - fail: msg="Database fail to return content"
