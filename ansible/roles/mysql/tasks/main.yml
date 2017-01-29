@@ -11,10 +11,10 @@
       notify: Restart mysql
 
     - name: Create database
-      mysql_db: name=demo state=present
+      mysql_db: name={{ db_name }} state=present
 
     - name: Create user, password, priv and hosts
-      mysql_user: name=demo password=demo priv=demo.*:ALL host='%' state=present
+      mysql_user: name={{ db_username }} password={{ db_password }} priv={{ db_name }}.*:ALL host='{{ db_host }}' state=present
 
     - name: Ensure mysql running
       service: name=mysql state=started enabled=yes
