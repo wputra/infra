@@ -11,8 +11,14 @@
       with_dict: "{{ sites }}"
       notify: Restart nginx
 
-    - name: De-activate nginx default config
-      file: path=/etc/nginx/sites-enabled/default state=absent
+    - name: Get active sites
+      shell: ls -1 /etc/nginx/sites-enabled
+      register: active
+
+    - name: De-activate uneccesary config
+      file: path=/etc/nginx/sites-enabled/{{ item }} state=absent
+      with_items: "{{ active['stdout_lines'] }}"
+      when: item not in sites
       notify: Restart nginx
 
     - name: Acivate demo config
