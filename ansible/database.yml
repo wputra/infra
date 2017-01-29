@@ -2,5 +2,7 @@
  - hosts: database
    become: true
    roles:
-    - { role: mysql, db_name: demo, db_username: demo, db_password: demo, db_host: '%' }
+    - role: mysql
+      db_username: "{{ db_user }}"
+      db_host: '%'
     

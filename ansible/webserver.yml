@@ -3,4 +3,4 @@
    become: true
    roles:
     - apache2
-    - { role: demo_app, db_user: demo, db_password: demo, db_name: demo }
+    - demo_app
