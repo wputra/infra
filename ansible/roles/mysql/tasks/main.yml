@@ -1,0 +1,20 @@
+---
+# tasks file for mysql
+    - name: Install mysql-server and its tools
+      apt: name={{ item }} state=present update_cache=no
+      with_items:
+       - mysql-server
+       - python-mysqldb
+
+    - name: Ensure mysql listening on all IP
+      lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address line="bind-address = 0.0.0.0"
+      notify: Restart mysql
+
+    - name: Create database
+      mysql_db: name=demo state=present
+
+    - name: Create user, password, priv and hosts
+      mysql_user: name=demo password=demo priv=demo.*:ALL host='%' state=present
+
+    - name: Ensure mysql running
+      service: name=mysql state=started enabled=yes
