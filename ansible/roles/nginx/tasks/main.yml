@@ -7,7 +7,8 @@
        - python-httplib2
 
     - name: Configure nginx
-      template: src=demo_lb.j2 dest=/etc/nginx/sites-available/demo_lb mode=0644
+      template: src=demo_lb.j2 dest=/etc/nginx/sites-available/{{ item.key }} mode=0644
+      with_dict: "{{ sites }}"
       notify: Restart nginx
 
     - name: De-activate nginx default config
@@ -15,7 +16,8 @@
       notify: Restart nginx
 
     - name: Acivate demo config
-      file: src=/etc/nginx/sites-available/demo_lb dest=/etc/nginx/sites-enabled/demo_lb state=link
+      file: src=/etc/nginx/sites-available/{{ item.key }} dest=/etc/nginx/sites-enabled/{{ item.key }} state=link
+      with_dict: "{{ sites }}"
       notify: Restart nginx
 
     - name: Ensure nginx running
