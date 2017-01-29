@@ -1,43 +1,6 @@
 ---
  - hosts: webserver
    become: true
-   tasks:
-    - name: Install webserver component
-      apt: name={{ item }} state=present update_cache=no
-      with_items:
-       - apache2
-       - libapache2-mod-wsgi
-       - python-pip
-       - python-virtualenv
-       - python-mysqldb
-
-    - name: Ensure mod_wsgi enabled
-      apache2_module: name=wsgi state=present
-      notify: Restart apache2
-
-    - name: Copy demo app source
-      copy: src=demo/app/ dest=/var/www/demo mode=0755
-      notify: Restart apache2
-
-    - name: Copy apache2 vhost config
-      copy: src=demo/demo.conf dest=/etc/apache2/sites-available mode=0775
-      notify: Restart apache2
-
-    - name: Setup python-virtualenv
-      pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv
-      notify: Restart apache2
-
-    - name: De-activate apache2 default config
-      file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
-      notify: Restart apache2
-
-    - name: Acivate demo config
-      file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
-      notify: Restart apache2
-
-    - name: Ensure apache2 running
-      service: name=apache2 state=started enabled=yes
-
-   handlers:
-    - name: Restart apache2
-      service: name=apache2 state=restarted
+   roles:
+    - apache2
+    - demo_app

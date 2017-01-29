@@ -1,2 +1,18 @@
 ---
 # tasks file for apache2
+    - name: Install webserver component
+      apt: name={{ item }} state=present update_cache=no
+      with_items:
+       - apache2
+       - libapache2-mod-wsgi
+    - name: Ensure mod_wsgi enabled
+      apache2_module: name=wsgi state=present
+      notify: Restart apache2
+
+    - name: De-activate apache2 default config
+      file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+      notify: Restart apache2
+
+    - name: Ensure apache2 running
+      service: name=apache2 state=started enabled=yes
+      
