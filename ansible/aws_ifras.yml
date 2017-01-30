@@ -8,7 +8,8 @@
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
-        cidr_block: 10.77.0.0/16
         tags: "{{ aws_tags }}"
         state: present
+        cidr_block: 10.77.0.0/16
+      register: vpc
 
