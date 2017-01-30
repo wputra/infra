@@ -2,3 +2,4 @@
 db_name: demo
 db_user: demo
 db_password: "{{ vault_db_password }}"
+aws_region: ap-southeast-1
