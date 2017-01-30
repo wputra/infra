@@ -6,6 +6,12 @@
        - curl
        - python-httplib2
        - python-pip
+       - python-dateutil
 
     - name: Install pyton package
-      pip: name=boto state=present
+      pip: name={{ item }} state=present
+      with_items:
+       - boto
+       - boto3
+       - botocore
+       
