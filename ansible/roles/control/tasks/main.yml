@@ -5,3 +5,7 @@
       with_items:
        - curl
        - python-httplib2
+       - python-pip
+
+    - name: Install pyton package
+      pip: name=boto state=present
