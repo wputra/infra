@@ -2,14 +2,13 @@
  - hosts: control
    gather_facts: false
    tasks:
-    - name: Create Test VPC
+    - name: Create All-New-OLX VPC
       ec2_vpc_net:
-        name: Test VPC
+        name: All-New-OLX VPC
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         cidr_block: 10.77.0.0/16
-        tags:
-          finance_region: Indonesia
+        tags: "{{ aws_tags }}"
         state: present
 
