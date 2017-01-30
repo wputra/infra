@@ -9,7 +9,7 @@
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         tags: "{{ aws_tags }}"
-        state: present
+        state: absent
         cidr_block: 10.77.0.0/16
       register: vpc
 
@@ -19,7 +19,7 @@
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         tags: "{{ aws_tags }}"
-        state: present
+        state: absent
         vpc_id: vpc-edaa1389
         cidr: 10.77.0.0/24
         az: ap-southeast-1a
@@ -31,7 +31,7 @@
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         tags: "{{ aws_tags }}"
-        state: present
+        state: absent
         vpc_id: vpc-edaa1389
         cidr: 10.77.1.0/24
         az: ap-southeast-1b

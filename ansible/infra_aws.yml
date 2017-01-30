@@ -1,0 +1,34 @@
+---
+ - hosts: control
+   gather_facts: false
+   tasks:
+    - name: Create VPC and Subnet
+      ec2_vpc:
+        state: present
+        region: "{{ aws_region }}"
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        cidr_block: 10.77.0.0/16
+        subnets:
+          - cidr: 10.77.0.0/24
+            resource_tags: {"Name":"Test Subnet"}
+        route_tables:
+          - subnets:
+            - 10.77.0.0/24
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+        wait: yes
+        internet_gateway: yes
+        resource_tags:
+          Name: "Test VPC"
+      register: vpc
+
+    - name: get igw
+      ec2_vpc_igw:
+        vpc_id: "{{ vpc.vpc_id }}"
+        region: "{{ aws_region }}"
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        state: present
+      register: igw
