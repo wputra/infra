@@ -25,3 +25,15 @@
         az: ap-southeast-1a
       register: public1
 
+    - name: Create All-New-OLX Subnet Public 2
+      ec2_vpc_subnet:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        tags: "{{ aws_tags }}"
+        state: present
+        vpc_id: vpc-edaa1389
+        cidr: 10.77.1.0/24
+        az: ap-southeast-1b
+      register: public2
+
