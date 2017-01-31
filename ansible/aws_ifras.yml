@@ -124,4 +124,39 @@
         subnets:
          - "{{ privat1.subnet.id }}"
          - "{{ privat2.subnet.id }}"
+      register: elasticache_subnet
+
+    - name: Create Redis security groups
+      ec2_group:
+        name: Redis security groups
+        description: Redis security groups
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        rules:
+         - proto: tcp
+           from_port: 6379
+           to_port: 6379
+           cidr_ip: "{{ vpc.vpc.cidr_block }}"
+      register: redis_sg
+
+    - name: Create Test-31Jan Redis Elasticache
+      elasticache:
+        name: Test-31Jan-redis
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: absent
+        engine: redis
+        cache_engine_version: 3.2.4
+        cache_parameter_group: default.redis3.2
+        node_type: cache.t2.medium
+        num_nodes: 1
+        cache_port: 6379
+        zone: "{{ aws_az_2 }}"
+        wait: yes
+
+
 
