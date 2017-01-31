@@ -69,3 +69,14 @@
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
       register: igw
+
+    - name: Create Test-31Jan NAT
+      ec2_vpc_nat_gateway:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        subnet_id: "{{ public1.subnet.id }}"
+        wait: yes
+        if_exist_do_not_create: yes
+      register: nat
