@@ -148,14 +148,16 @@
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
-        state: absent
+        state: present
         engine: redis
         cache_engine_version: 3.2.4
         cache_parameter_group: default.redis3.2
+        security_group_ids: "{{ redis_sg.group_id }}"
+        cache_subnet_group: Test-31Jan
         node_type: cache.t2.medium
         num_nodes: 1
         cache_port: 6379
-        zone: "{{ aws_az_2 }}"
+        zone: "{{ aws_az_1 }}"
         wait: yes
 
 
