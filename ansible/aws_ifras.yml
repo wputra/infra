@@ -96,3 +96,19 @@
          - dest: 0.0.0.0/0
            gateway_id: "{{ igw.gateway_id }}"
       register: public_route
+
+    - name: Set up privat subnet route table
+      ec2_vpc_route_table:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        tags: { "Name" : "Privat route" }
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        subnets:
+         - "{{ privat1.subnet.id }}"
+         - "{{ privat2.subnet.id }}"
+        routes:
+         - dest: 0.0.0.0/0
+           gateway_id: "{{ nat.nat_gateway_id }}"
+      register: private_route
