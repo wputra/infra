@@ -2,38 +2,70 @@
  - hosts: control
    gather_facts: false
    tasks:
-    - name: Create All-New-OLX VPC
+    - name: Create Test-31Jan VPC
       ec2_vpc_net:
-        name: All-New-OLX VPC
+        name: Test-31Jan VPC
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         tags: "{{ aws_tags }}"
-        state: absent
+        state: present
         cidr_block: 10.77.0.0/16
       register: vpc
 
-    - name: Create All-New-OLX Subnet Public 1
+    - name: Create Test-31Jan Subnet Public 1
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
-        tags: "{{ aws_tags }}"
-        state: absent
-        vpc_id: vpc-edaa1389
+        tags: { "Name" : "Public-1" }
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
         cidr: 10.77.0.0/24
-        az: ap-southeast-1a
+        az: "{{ aws_az_1 }}"
       register: public1
 
-    - name: Create All-New-OLX Subnet Public 2
+    - name: Create Test-31Jan Subnet Public 2
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
-        tags: "{{ aws_tags }}"
-        state: absent
-        vpc_id: vpc-edaa1389
+        tags: { "Name" : "Public-2" }
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
         cidr: 10.77.1.0/24
-        az: ap-southeast-1b
+        az: "{{ aws_az_2 }}"
       register: public2
 
+    - name: Create Test-31Jan Subnet Privat 1
+      ec2_vpc_subnet:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        tags: { "Name" : "Privat-1" }
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        cidr: 10.77.2.0/23
+        az: "{{ aws_az_1 }}"
+      register: privat1
+
+    - name: Create Test-31Jan Subnet Privat 2
+      ec2_vpc_subnet:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        tags: { "Name" : "Privat-2" }
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        cidr: 10.77.4.0/23
+        az: "{{ aws_az_2 }}"
+      register: privat2
+
+    - name: Create Test-31Jan IGW
+      ec2_vpc_igw:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+      register: igw
