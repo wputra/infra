@@ -112,3 +112,16 @@
          - dest: 0.0.0.0/0
            gateway_id: "{{ nat.nat_gateway_id }}"
       register: private_route
+
+    - name: Create Redis subnet group
+      elasticache_subnet_group:
+        name: Test-31Jan
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        description: Test-31Jan Redis subnet group
+        subnets:
+         - "{{ privat1.subnet.id }}"
+         - "{{ privat2.subnet.id }}"
+
