@@ -160,5 +160,42 @@
         zone: "{{ aws_az_1 }}"
         wait: yes
 
+    - name: Create bastion security groups
+      ec2_group:
+        name: Bastion security groups
+        description: bastion security groups
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        state: present
+        vpc_id: "{{ vpc.vpc.id }}"
+        rules:
+         - proto: tcp
+           from_port: 22
+           to_port: 22
+           cidr_ip: 0.0.0.0/0
+      register: bastion_sg
+
+    - name: Launch bastion host for All-New-OLX
+      ec2:
+        aws_access_key: "{{ vault_access_key }}"
+        aws_secret_key: "{{ vault_secret_key }}"
+        region: "{{ aws_region }}"
+        #state: present
+        #instance_ids:
+        # - 'i-xxx'
+        # - 'i-yyy'
+        instance_type: t2.micro
+        image: ami-06963965
+        wait: yes
+        assign_public_ip: yes
+        group_id: "{{ bastion_sg.group_id }}"
+        instance_tags: { "Name" : "All-New-OLX Bastion" }
+        vpc_subnet_id: "{{ public2.subnet.id }}"
+        key_name: olxid-staging
+        count_tag: { "Name" : "All-New-OLX Bastion" }
+        exact_count: 1
+      register: bastion_host
+
 
 
