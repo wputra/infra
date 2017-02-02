@@ -14,20 +14,21 @@
       "source_ami": "ami-06963965",
       "instance_type": "t2.micro",
       "ssh_username": "ubuntu",
-      "ami_name": "packer-example {{timestamp}}"
+      "ami_name": "apache-laravel {{timestamp}}"
     }
   ],
 
   "provisioners": [
     {
-      "type": "shell",
-      "script": "install.sh"
+      "type": "file",
+      "source": "config/",
+      "destination": "/tmp/"
     },
     {
-      "type": "file",
-      "source": "mobile-server.txt",
-      "destination": "/tmp/mobile-server.txt"
-    }
+      "type": "shell",
+      "execute_command": "sudo bash -c '{{ .Path }}'",
+      "script": "install.sh"
+    }    
   ]
 
 }
