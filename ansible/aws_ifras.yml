@@ -2,18 +2,18 @@
  - hosts: control
    gather_facts: false
    tasks:
-    - name: Create Test-31Jan VPC
+    - name: Create All-New-OLX VPC
       ec2_vpc_net:
-        name: Test-31Jan VPC
+        name: All-New-OLX VPC
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         tags: "{{ aws_tags }}"
         state: present
-        cidr_block: 10.77.0.0/16
+        cidr_block: 10.88.0.0/16
       register: vpc
 
-    - name: Create Test-31Jan Subnet Public 1
+    - name: Create All-New-OLX Subnet Public 1
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -21,11 +21,11 @@
         tags: { "Name" : "Public-1" }
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
-        cidr: 10.77.0.0/24
+        cidr: 10.88.0.0/24
         az: "{{ aws_az_1 }}"
       register: public1
 
-    - name: Create Test-31Jan Subnet Public 2
+    - name: Create All-New-OLX Subnet Public 2
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -33,11 +33,11 @@
         tags: { "Name" : "Public-2" }
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
-        cidr: 10.77.1.0/24
+        cidr: 10.88.1.0/24
         az: "{{ aws_az_2 }}"
       register: public2
 
-    - name: Create Test-31Jan Subnet Privat 1
+    - name: Create All-New-OLX Subnet Privat 1
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -45,11 +45,11 @@
         tags: { "Name" : "Privat-1" }
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
-        cidr: 10.77.2.0/23
+        cidr: 10.88.2.0/23
         az: "{{ aws_az_1 }}"
       register: privat1
 
-    - name: Create Test-31Jan Subnet Privat 2
+    - name: Create All-New-OLX Subnet Privat 2
       ec2_vpc_subnet:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -57,11 +57,11 @@
         tags: { "Name" : "Privat-2" }
         state: present
         vpc_id: "{{ vpc.vpc.id }}"
-        cidr: 10.77.4.0/23
+        cidr: 10.88.4.0/23
         az: "{{ aws_az_2 }}"
       register: privat2
 
-    - name: Create Test-31Jan IGW
+    - name: Create All-New-OLX IGW
       ec2_vpc_igw:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -70,7 +70,7 @@
         vpc_id: "{{ vpc.vpc.id }}"
       register: igw
 
-    - name: Create Test-31Jan NAT
+    - name: Create All-New-OLX NAT
       ec2_vpc_nat_gateway:
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
@@ -115,12 +115,12 @@
 
     - name: Create Redis subnet group
       elasticache_subnet_group:
-        name: Test-31Jan
+        name: All-New-OLX
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
         state: present
-        description: Test-31Jan Redis subnet group
+        description: All-New-OLX Redis subnet group
         subnets:
          - "{{ privat1.subnet.id }}"
          - "{{ privat2.subnet.id }}"
@@ -142,18 +142,18 @@
            cidr_ip: "{{ vpc.vpc.cidr_block }}"
       register: redis_sg
 
-    - name: Create Test-31Jan Redis Elasticache
+    - name: Create All-New-OLX Redis Elasticache
       elasticache:
-        name: Test-31Jan-redis
+        name: All-New-OLX-redis
         aws_access_key: "{{ vault_access_key }}"
         aws_secret_key: "{{ vault_secret_key }}"
         region: "{{ aws_region }}"
-        state: present
+        state: absent
         engine: redis
         cache_engine_version: 3.2.4
         cache_parameter_group: default.redis3.2
         security_group_ids: "{{ redis_sg.group_id }}"
-        cache_subnet_group: Test-31Jan
+        cache_subnet_group: All-New-OLX
         node_type: cache.t2.medium
         num_nodes: 1
         cache_port: 6379
