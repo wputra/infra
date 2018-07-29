@@ -2,13 +2,3 @@
 db_name: demo
 db_user: demo
 db_password: "{{ vault_db_password }}"
-aws_region: ap-southeast-1
-aws_tags: 
-  finance_region: Indonesia
-  finance_costcenter_id: 19:v0.0.2
-  finance_profitcenter_id: 70:v0.0.2
-  owner: Infrastructure
-  managed_by: Ansible
-  region: SEA
-aws_az_1: ap-southeast-1a
-aws_az_2: ap-southeast-1b
