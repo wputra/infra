@@ -10,11 +10,11 @@
       lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address line="bind-address = {{ ansible_eth1.ipv4.address }}"
       notify: Restart mysql
 
+    - name: Ensure mysql running
+      service: name=mysql state=started enabled=yes
+
     - name: Create database
       mysql_db: name={{ db_name }} state=present
 
     - name: Create user, password, priv and hosts
       mysql_user: name={{ db_username }} password={{ db_password }} priv={{ db_name }}.*:ALL host='{{ db_host }}' state=present
-
-    - name: Ensure mysql running
-      service: name=mysql state=started enabled=yes
