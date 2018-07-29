@@ -32,9 +32,9 @@ def home():
 def dbtest():
     try:
         app.db.create_all()
+        return 'Database Connected \n'
     except Exception as e:
         return e.message + '\n'
-    return 'Database Connected \n'
 
 if __name__ == '__main__':
     app.run(debug=True)
