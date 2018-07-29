@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, String, create_engine
+from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -20,6 +20,9 @@ class User(Base):
             self.email = email
         if password is not None:
             self.password = password
+
+    def dump(self):
+        return dict([(k, v) for k, v in vars(self).items() if not k.startswith('_')])
 
 class ApiResponse(Base):
     __tablename__ = 'api_response'
