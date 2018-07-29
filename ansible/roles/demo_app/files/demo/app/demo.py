@@ -1,23 +1,29 @@
-from flask import Flask
-from flask.ext.sqlalchemy import SQLAlchemy
-import os, socket
+"""
+Main module of the server file
+"""
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URI']
-db = SQLAlchemy(app)
-hostname = socket.gethostname()
+# 3rd party moudles
+from flask import render_template
+import connexion
 
+
+# Create the application instance
+app = connexion.App(__name__, specification_dir='./')
+
+# read the swagger.yml file to configure the endpoints
+app.add_api('swagger.yml')
+
+
+# Create a URL route in our application for "/"
 @app.route('/')
-def index():
-  return 'Hello, from sunny %s!\n' % hostname
+def home():
+    """
+    This function just responds to the browser URL
+    localhost:5000/
+    :return:        the rendered template "home.html"
+    """
+    return render_template("home.html")
 
-@app.route('/db')
-def dbtest():
-  try:
-      db.create_all()
-  except Exception as e:
-      return e.message + '\n'
-  return 'Database Connected from %s!\n' % hostname
 
 if __name__ == '__main__':
-  app.run()
+    app.run(debug=True)
