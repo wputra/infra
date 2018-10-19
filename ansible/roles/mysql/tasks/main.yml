@@ -1,13 +1,13 @@
 ---
 # tasks file for mysql
     - name: Install mysql-server and its tools
-      apt: name={{ item }} state=present update_cache=no
+      apt: name={{ item }} state=present update_cache=yes
       with_items:
        - mysql-server
-       - python-mysqldb
+       - python3-mysqldb
 
-    - name: Ensure mysql listening on eth1
-      lineinfile: dest=/etc/mysql/my.cnf regexp=^bind-address line="bind-address = {{ ansible_eth1.ipv4.address }}"
+    - name: Ensure mysql listening on all interface
+      lineinfile: dest=/etc/mysql/mysql.conf.d/mysqld.cnf regexp=^bind-address line="bind-address = 0.0.0.0"
       notify: Restart mysql
 
     - name: Ensure mysql running

@@ -1,7 +1,7 @@
 ---
 # tasks file for demo_app
     - name: Install webserver component
-      apt: name={{ item }} state=present update_cache=no
+      apt: name={{ item }} state=present update_cache=yes
       with_items:
        - python-pip
        - python-virtualenv
@@ -20,7 +20,7 @@
       notify: Restart apache2
 
     - name: Setup python-virtualenv
-      pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv
+      pip: requirements=/var/www/demo/requirements.txt virtualenv=/var/www/demo/.venv virtualenv_python=python
       notify: Restart apache2
 
     - name: Acivate demo config
@@ -29,4 +29,3 @@
 
     - name: Ensure apache2 running
       service: name=apache2 state=started enabled=yes
-      

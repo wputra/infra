@@ -1,7 +1,7 @@
 ---
 # tasks file for apache2
     - name: Install webserver component
-      apt: name={{ item }} state=present update_cache=no
+      apt: name={{ item }} state=present update_cache=yes
       with_items:
        - apache2
        - libapache2-mod-wsgi
