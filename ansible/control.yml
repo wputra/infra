@@ -3,4 +3,4 @@
    become: true
    roles:
     - control
-    
+    - cloudalchemy.node-exporter

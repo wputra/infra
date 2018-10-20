@@ -1,0 +1,8 @@
+---
+ - hosts: monitoring
+   become: true
+   roles:
+    - cloudalchemy.node-exporter
+    - cloudalchemy.prometheus
+    - cloudalchemy.alertmanager
+    - cloudalchemy.grafana

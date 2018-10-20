@@ -1,0 +1,8 @@
+- name: cloudalchemy.node-exporter
+  version: 0.11.2
+- name: cloudalchemy.prometheus
+  version: 2.4.0
+- name: cloudalchemy.alertmanager
+  version: 0.13.5
+- name: cloudalchemy.grafana
+  version: 0.11.4

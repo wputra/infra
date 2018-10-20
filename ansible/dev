@@ -10,3 +10,6 @@ app02 ansible_python_interpreter=/usr/bin/python3
 
 [database]
 db01 ansible_python_interpreter=/usr/bin/python3
+
+[monitoring]
+mon01 ansible_python_interpreter=/usr/bin/python3

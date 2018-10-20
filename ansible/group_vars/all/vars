@@ -2,3 +2,77 @@
 db_name: demo
 db_user: demo
 db_password: "{{ vault_db_password }}"
+
+prometheus_web_external_url: "http://{{ ansible_host }}:9090"
+prometheus_storage_retention: "14d"
+
+prometheus_alertmanager_config:
+  - scheme: http
+    static_configs:
+      - targets:
+        - "{{ ansible_host }}:9093"
+
+prometheus_targets:
+  node:
+    - targets:
+        "{{ groups['all'] | map('regex_replace', '$', ':9100') | list }}"
+
+prometheus_scrape_configs:
+- job_name: "prometheus"
+  metrics_path: "/metrics"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:9090"
+- job_name: "node"
+  file_sd_configs:
+  - files:
+    - "/etc/prometheus/file_sd/node.yml"
+- job_name: "alertmanager"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:9093"
+- job_name: "grafana"
+  static_configs:
+  - targets:
+    - "{{ ansible_host }}:3000"
+
+alertmanager_external_url: "http://{{ ansible_host }}:9093"
+alertmanager_slack_api_url: "http://example.org"
+alertmanager_receivers:
+- name: slack
+  slack_configs:
+  - send_resolved: true
+    api_url: $slack_api_url
+    channel: '#alerts'
+alertmanager_route:
+  group_by: ['alertname', 'cluster', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: slack
+
+grafana_security:
+  admin_user: admin
+  admin_password: "{{ vault_grafana_password }}"
+
+grafana_auth:
+  anonymous:
+    org_name: "Main Org."
+    org_role: Viewer
+
+grafana_datasources:
+  - name: "Prometheus"
+    type: "prometheus"
+    access: "proxy"
+    url: "http://mon01:9090"
+    isDefault: true
+grafana_dashboards:
+  - dashboard_id: '1860'
+    revision_id: '12'
+    datasource: '{{ grafana_datasources.0.name }}'
+  - dashboard_id: '3662'
+    revision_id: '2'
+    datasource: '{{ grafana_datasources.0.name }}'
+  - dashboard_id: '4271'
+    revision_id: '4'
+    datasource: '{{ grafana_datasources.0.name }}'
