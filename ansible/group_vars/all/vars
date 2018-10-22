@@ -35,6 +35,16 @@ prometheus_scrape_configs:
   static_configs:
   - targets:
     - "{{ ansible_host }}:3000"
+- job_name: 'federate'
+  scrape_interval: 15s
+  honor_labels: true
+  metrics_path: '/federate'
+  params:
+    'match[]':
+      - '{__name__=~".+"}'
+  static_configs:
+    - targets:
+      - '192.168.99.101:31621'
 
 alertmanager_external_url: "http://{{ ansible_host }}:9093"
 alertmanager_slack_api_url: "http://example.org"
@@ -66,10 +76,6 @@ grafana_datasources:
     access: "proxy"
     url: "http://mon01:9090"
     isDefault: true
-  - name: "Prometheus k8s"
-    type: "prometheus"
-    access: "proxy"
-    url: "http://192.168.99.101:31621"
 
 grafana_dashboards:
   - dashboard_id: '1860'
@@ -83,4 +89,4 @@ grafana_dashboards:
     datasource: '{{ grafana_datasources.0.name }}'
   - dashboard_id: '315'
     revision_id: '3'
-    datasource: '{{ grafana_datasources.1.name }}'
+    datasource: '{{ grafana_datasources.0.name }}'
