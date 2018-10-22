@@ -66,6 +66,11 @@ grafana_datasources:
     access: "proxy"
     url: "http://mon01:9090"
     isDefault: true
+  - name: "Prometheus k8s"
+    type: "prometheus"
+    access: "proxy"
+    url: "http://192.168.99.101:31621"
+
 grafana_dashboards:
   - dashboard_id: '1860'
     revision_id: '12'
@@ -76,3 +81,6 @@ grafana_dashboards:
   - dashboard_id: '4271'
     revision_id: '4'
     datasource: '{{ grafana_datasources.0.name }}'
+  - dashboard_id: '315'
+    revision_id: '3'
+    datasource: '{{ grafana_datasources.1.name }}'
