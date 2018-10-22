@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: k8s-dashboard-expose
+  namespace: kube-system
+spec:
+  type: NodePort
+  selector:
+    app: kubernetes-dashboard
+  ports:
+  - protocol: TCP
+    port: 9090

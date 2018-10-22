@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: prometheus-dashboard-expose
+  namespace: monitoring
+spec:
+  type: NodePort
+  selector:
+    app: prometheus
+  ports:
+  - protocol: TCP
+    port: 9090
